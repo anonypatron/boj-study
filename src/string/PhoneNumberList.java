@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/*
-    1. tree를 만든다. (char, leaf인지 확인하는 flag)
- */
-public class PhoneNumberList {
+public class PhoneNumberList { // 5052
     static class Node {
         Node []children = new Node[10];
         boolean isEnd;
@@ -23,7 +20,6 @@ public class PhoneNumberList {
 
                 if (current.children[index] == null) {
                     current.children[index] = new Node();
-
                 }
                 current = current.children[index];
 
@@ -53,8 +49,7 @@ public class PhoneNumberList {
             boolean flag = true;
 
             for (int i = 0; i < n; i++) {
-                String s = br.readLine();
-                if (!trie.insertNode(s)) {
+                if (!trie.insertNode(br.readLine())) {
                     flag = false;
                 }
             }
@@ -64,4 +59,5 @@ public class PhoneNumberList {
 
         System.out.print(sb);
     }
+
 }

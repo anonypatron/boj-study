@@ -8,23 +8,6 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class BreakWallAndMove {
-//    static class Point {
-//        int x, y;
-//        Point(int x, int y) {
-//            this.x = x;
-//            this.y = y;
-//        }
-//    }
-    static class Person {
-        int x, y, count;
-        boolean destroyed;
-        public Person (int x, int y, int count, boolean destroyed) {
-            this.x = x;
-            this.y = y;
-            this.count = count;
-            this.destroyed = destroyed;
-        }
-    }
     static boolean [][][]visited;
     static int [][]matrix;
     static int []dx = {-1, 0, 1, 0}, dy = {0, -1, 0, 1};
@@ -41,46 +24,38 @@ public class BreakWallAndMove {
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
             for (int j = 0; j < M; j++) {
-                matrix[i][j] = Character.getNumericValue(str.charAt(j));
+                matrix[i][j] = str.charAt(j) - '0';
             }
         }
 
-        System.out.print(bfs(new Person(0, 0, 1, false)));
+        System.out.print(bfs());
     }
 
-    private static int bfs(Person person) {
-        Queue<Person> q = new LinkedList<>();
+    private static int bfs() {
+        Queue<int []> q = new LinkedList<>();
         visited[0][0][0] = true;
-        q.add(person);
+        q.add(new int []{0, 0, 1, 0});
 
         while (!q.isEmpty()) {
-            Person p = q.poll();
-
-            if (p.x == N - 1 && p.y == M - 1) return p.count;
+            int []p = q.poll();
+            int x = p[0], y = p[1], count = p[2], destroyed = p[3];
+            if (x == N - 1 && y == M - 1) return count;
 
             for (int i = 0; i < 4; i++) {
-                int nx = p.x + dx[i];
-                int ny = p.y + dy[i];
+                int nx = x + dx[i];
+                int ny = y + dy[i];
                 /*
                     1. 벽일 때와 벽이 아닐 때를 나누너서 계산
                         2. 벽을 부쉈을 때와 부수지 않았을 때를 나누어서 돌리기
                  */
                 if (checkRange(nx, ny)) { // 범위 안에 들어옴
-                    if (matrix[nx][ny] == 0) { // 벽이 아님
-                        if (!p.destroyed) { // 아직 부순적이 없음
-                            visited[nx][ny][0] = true;
-                        }
-                        else { // 이미 한 번 부숨
-                            visited[nx][ny][1] = true;
-                        }
-                        q.add(new Person(nx, ny, p.count + 1, p.destroyed));
+                    if (!visited[nx][ny][destroyed] && matrix[nx][ny] == 0) { // 벽이 아님
+                        visited[nx][ny][destroyed] = true;
+                        q.add(new int []{nx, ny, count + 1, destroyed});
                     }
-                    else if (matrix[nx][ny] == 1) { // 벽이 아님
-                        if (!p.destroyed) { // 아직 부수적이 없음
-                            q.add(new Person(nx, ny, p.count + 1, true));
-                            visited[nx][ny][1] = true;
-                        }
-                        // 이미 부순적이 있으면 못 부수기 때문에 넘어가기
+                    else if (!visited[nx][ny][1] && matrix[nx][ny] == 1 && destroyed == 0) { // 벽임
+                        q.add(new int []{nx, ny, count + 1, 1});
+                        visited[nx][ny][1] = true;
                     }
                 } // end if
             } // end for
