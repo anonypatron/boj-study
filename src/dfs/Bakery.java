@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Bakery {
+public class Bakery { // 3109
     static int [][]matrix;
     static int []dx = {-1, 0 ,1};
     static int N, M;

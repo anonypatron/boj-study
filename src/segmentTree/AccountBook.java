@@ -1,4 +1,4 @@
-package datastructure;
+package segmentTree;
 
 import java.io.BufferedReader;
 import java.io.IOException;
